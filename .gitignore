@@ -1,0 +1,7 @@
+bin
+obj
+*.crt
+*.key
+test.json
+test.yaml
+*.tgz

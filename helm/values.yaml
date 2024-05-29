@@ -1,0 +1,48 @@
+# Default values for derrer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Service account to use for the webservice
+serviceAccountName:
+
+# Configuration for webservice pod
+service:
+  name: derrer-service
+  type: ClusterIP
+  image:
+    repository: peeveen/derrer-service
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext:
+    {}
+    # fsGroup: 2000
+  securityContext:
+    {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# Annotations to look for on K8S Secrets
+# At least one must have a non-blank value for derrer to trigger.
+annotations:
+  default: com.peeveen.derrer
+  names: com.peeveen.derrer/names
+  extensions: com.peeveen.derrer/extensions
+
+# How long should the HTTPS certificates last.
+# Careful: too big a number will cause the expiry-date calculation to overlow
+# and loop back into Victorian times.
+certificate:
+  lifespanDays: 36500
+
+# Helm name overrides
+nameOverride: ""
+fullnameOverride: ""

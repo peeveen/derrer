@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "derrer.fullname" . }}-{{ .Values.service.name }}
+  labels: {{- include "derrer.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 443
+      name: https
+      targetPort: 8080
+  selector:
+    {{- include "derrer.selectorLabels" . | nindent 4 }}

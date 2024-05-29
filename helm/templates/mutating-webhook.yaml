@@ -1,0 +1,51 @@
+{{- $altNames := list ( printf "%s-%s.%s" (include "derrer.fullname" .) .Values.service.name .Release.Namespace ) ( printf "%s-%s.%s.svc" (include "derrer.fullname" .) .Values.service.name .Release.Namespace ) -}}
+{{- $ca := genCA "derrer-ca" (.Values.certificate.lifespanDays | int) -}}
+{{- $cert := genSignedCert ( include "derrer.fullname" . ) nil $altNames (.Values.certificate.lifespanDays | int) $ca -}}
+{{- $tlsKeyBase64 := $cert.Key | b64enc -}}
+{{- $tlsCertBase64 := $cert.Cert | b64enc -}}
+{{- $caCertBase64 := $ca.Cert | b64enc -}}
+
+############################################################
+# OPA admission controller configuration for pod.
+############################################################
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "derrer.fullname" . }}
+webhooks:
+  - name: {{ include "derrer.fullname" . }}.peeveen.com
+    clientConfig:
+      # !!!!!VERY IMPORTANT!!!!!
+      # The webhook service MUST have a TLS certificate with a SAN (subject
+      # alternative name) of "[servicename].[namespace].svc"
+      service:
+        name: {{ include "derrer.fullname" . }}-{{ .Values.service.name }}
+        namespace: {{ .Release.Namespace }}
+        path: "/der"
+      caBundle: {{ $caCertBase64 }}
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: ["*"]
+        apiVersions: ["v1"]
+        resources: ["secrets"]
+    matchConditions:
+      - name: derrer-enabled
+        expression: 'has(object.metadata.annotations) && ((object.metadata.annotations["{{ .Values.annotations.default }}"] != null && object.metadata.annotations["{{ .Values.annotations.default }}"] != "") || (object.metadata.annotations["{{ .Values.annotations.names }}"] != null && object.metadata.annotations["{{ .Values.annotations.names }}"] != "") || (object.metadata.annotations["{{ .Values.annotations.extensions }}"] != null && object.metadata.annotations["{{ .Values.annotations.extensions }}"] != ""))'
+    failurePolicy: Fail
+    admissionReviewVersions: ["v1beta1"]
+    sideEffects: None
+---
+############################################################
+# TLS certificates for OPA admission controller. The K8S
+# mutating webhook will not allow communication with a plain
+# HTTP service, so the service MUST be HTTPS. Luckily,
+# the communication is entirely intra-cluster, so a self-
+# signed certificate works perfectly fine.
+############################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "derrer.fullname" . }}-tls
+data:
+  tls.key: {{ $tlsKeyBase64 }}
+  tls.crt: {{ $tlsCertBase64 }}

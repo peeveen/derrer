@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "derrer-service", "derrer-service.csproj", "{E83038E9-3BA5-4C03-B86B-27E50A0D4270}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E83038E9-3BA5-4C03-B86B-27E50A0D4270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E83038E9-3BA5-4C03-B86B-27E50A0D4270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E83038E9-3BA5-4C03-B86B-27E50A0D4270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E83038E9-3BA5-4C03-B86B-27E50A0D4270}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D4E94EF-B933-4492-99D5-65C2F43C9C6E}
+	EndGlobalSection
+EndGlobal
