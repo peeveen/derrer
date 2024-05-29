@@ -30,7 +30,7 @@ webhooks:
         resources: ["secrets"]
     matchConditions:
       - name: derrer-enabled
-        expression: 'has(object.metadata.annotations) && ((object.metadata.annotations["{{ .Values.annotations.default }}"] != null && object.metadata.annotations["{{ .Values.annotations.default }}"] != "") || (object.metadata.annotations["{{ .Values.annotations.names }}"] != null && object.metadata.annotations["{{ .Values.annotations.names }}"] != "") || (object.metadata.annotations["{{ .Values.annotations.extensions }}"] != null && object.metadata.annotations["{{ .Values.annotations.extensions }}"] != ""))'
+        expression: has(object.metadata.annotations) && object.metadata.annotations.exists(key, key.matches('^({{ .Values.annotations.default }}|{{ .Values.annotations.names }}|{{ .Values.annotations.extensions }})$') && object.metadata.annotations[key] != null && object.metadata.annotations[key].matches('\\S'))
     failurePolicy: Fail
     admissionReviewVersions: ["v1beta1"]
     sideEffects: None

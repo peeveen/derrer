@@ -6,7 +6,7 @@ internal class Parameters {
 
 	internal string[] Names { get; } = [];
 	internal string[] Extensions { get; } = ["key"];
-	internal string DerExtension { get; } = string.Empty;
+	internal string DerExtension { get; } = "der";
 
 	internal Parameters(IDictionary<string, object?>? annotations) {
 		if (annotations != null) {
