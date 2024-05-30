@@ -39,12 +39,24 @@ spec:
           - readOnly: true
             mountPath: /derrer/ssl
             name: ssl
-          livenessProbe:
+          readinessProbe:
             httpGet:
               path: /version
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /version
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /version
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
       volumes:
       - name: ssl
         secret:
