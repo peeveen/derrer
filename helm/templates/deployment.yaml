@@ -51,12 +51,6 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5
-          startupProbe:
-            httpGet:
-              path: /version
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 5
       volumes:
       - name: ssl
         secret:
