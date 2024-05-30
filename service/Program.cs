@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -40,6 +41,8 @@ object[] BuildJsonPatches(ILogger<Program> logger, IEnumerable<KeyValuePair<stri
 			return null;
 		}
 	}).OfType<object>().ToArray();
+
+app.MapGet("/version", () => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown");
 
 app.MapPost("/der", ([FromServices] ILogger<Program> logger, [FromBody] dynamic input) => {
 	var annotations = input.request.@object.metadata.annotations as IDictionary<string, object?>;
