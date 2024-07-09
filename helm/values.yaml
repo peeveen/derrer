@@ -7,7 +7,7 @@ serviceAccountName:
 
 # Configuration for webservice pod
 service:
-  name: derrer-service
+  name: derrer
   type: ClusterIP
   image:
     repository: peeveen/derrer-service
