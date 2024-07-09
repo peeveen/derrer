@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "derrer.fullname" . }}-{{ .Values.service.name }}
+  name: {{ include "derrer.fullname" . }}
   labels:
     {{- include "derrer.labels" . | nindent 4 }}
 spec:
