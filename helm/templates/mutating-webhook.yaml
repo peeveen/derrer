@@ -19,7 +19,7 @@ webhooks:
       # The webhook service MUST have a TLS certificate with a SAN (subject
       # alternative name) of "[servicename].[namespace].svc"
       service:
-        name: {{ include "derrer.fullname" . }}-{{ .Values.service.name }}
+        name: {{ include "derrer.fullname" . }}-mutating-webhook
         namespace: {{ .Release.Namespace }}
         path: "/der"
       caBundle: {{ $caCertBase64 }}
