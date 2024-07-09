@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "derrer.fullname" . }}-{{ .Values.service.name }}
+  name: {{ include "derrer.fullname" . }}-service
   labels: {{- include "derrer.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
