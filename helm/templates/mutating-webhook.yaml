@@ -1,4 +1,4 @@
-{{- $altNames := list ( printf "%s-mutating-webhook.%s" (include "derrer.fullname" .) .Release.Namespace ) ( printf "%s-mutating-webhook.%s.svc" (include "derrer.fullname" .) .Release.Namespace ) -}}
+{{- $altNames := list ( printf "%s-service.%s" (include "derrer.fullname" .) .Release.Namespace ) ( printf "%s-service.%s.svc" (include "derrer.fullname" .) .Release.Namespace ) -}}
 {{- $ca := genCA "derrer-ca" (.Values.certificate.lifespanDays | int) -}}
 {{- $cert := genSignedCert ( include "derrer.fullname" . ) nil $altNames (.Values.certificate.lifespanDays | int) $ca -}}
 {{- $tlsKeyBase64 := $cert.Key | b64enc -}}
@@ -19,7 +19,7 @@ webhooks:
       # The webhook service MUST have a TLS certificate with a SAN (subject
       # alternative name) of "[servicename].[namespace].svc"
       service:
-        name: {{ include "derrer.fullname" . }}-mutating-webhook
+        name: {{ include "derrer.fullname" . }}-service
         namespace: {{ .Release.Namespace }}
         path: "/der"
       caBundle: {{ $caCertBase64 }}
