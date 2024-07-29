@@ -1,4 +1,4 @@
-{{- $altNames := list ( printf "%s-%s.%s" (include "derrer.fullname" .) .Values.service.name .Release.Namespace ) ( printf "%s-%s.%s.svc" (include "derrer.fullname" .) .Values.service.name .Release.Namespace ) -}}
+{{- $altNames := list ( printf "%s-mutating-webhook.%s" (include "derrer.fullname" .) .Release.Namespace ) ( printf "%s-mutating-webhook.%s.svc" (include "derrer.fullname" .) .Release.Namespace ) -}}
 {{- $ca := genCA "derrer-ca" (.Values.certificate.lifespanDays | int) -}}
 {{- $cert := genSignedCert ( include "derrer.fullname" . ) nil $altNames (.Values.certificate.lifespanDays | int) $ca -}}
 {{- $tlsKeyBase64 := $cert.Key | b64enc -}}
