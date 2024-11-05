@@ -42,10 +42,25 @@ webhooks:
 # the communication is entirely intra-cluster, so a self-
 # signed certificate works perfectly fine.
 ############################################################
+{{ $secretName := printf "%s-tls" ( include "derrer.fullname" . ) }}
+{{- $oldSecret := lookup "v1" "Secret" .Release.Namespace $secretName }}
+{{ $oldSecretTlsKey := "" }}
+{{ $oldSecretTlsCert := "" }}
+{{- if $oldSecret }}
+{{ $secretData := index $oldSecret "data" }}
+{{ $oldSecretTlsKey = index $secretData "tls.key" }}
+{{ $oldSecretTlsCert = index $secretData "tls.crt" }}
+{{ end }}
+
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "derrer.fullname" . }}-tls
+  name: {{ $secretName }}
 data:
+{{- if or (not $oldSecretTlsKey) (not $oldSecretTlsCert) }}
   tls.key: {{ $tlsKeyBase64 }}
   tls.crt: {{ $tlsCertBase64 }}
+{{- else }}
+  tls.key: {{ $oldSecretTlsKey }}
+  tls.crt: {{ $oldSecretTlsCert }}
+{{- end }}
