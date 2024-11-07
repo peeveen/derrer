@@ -5,15 +5,25 @@
 {{- $tlsCertBase64 := $cert.Cert | b64enc -}}
 {{- $caCertBase64 := $ca.Cert | b64enc -}}
 
+{{ $webhookName := printf "%s" ( include "derrer.fullname" . ) }}
+{{- $oldWebhook := lookup "admissionregistration.k8s.io/v1" "MutatingWebhookConfiguration" .Release.Namespace $webhookName }}
+{{- if $oldWebhook }}
+{{ $webhooks := index $oldWebhook "webhooks" }}
+{{ $webhook := index $webhooks 0 }}
+{{ $clientConfig := index $webhook "clientConfig" }}
+{{ $caBundle := index $clientConfig "caBundle" }}
+{{ $caCertBase64 = $caBundle }}
+{{ end }}
+
 ############################################################
 # OPA admission controller configuration for pod.
 ############################################################
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: {{ include "derrer.fullname" . }}
+  name: {{ $webhookName }}
 webhooks:
-  - name: {{ include "derrer.fullname" . }}.peeveen.com
+  - name: {{ $webhookName }}.peeveen.com
     clientConfig:
       # !!!!!VERY IMPORTANT!!!!!
       # The webhook service MUST have a TLS certificate with a SAN (subject
@@ -44,12 +54,11 @@ webhooks:
 ############################################################
 {{ $secretName := printf "%s-tls" ( include "derrer.fullname" . ) }}
 {{- $oldSecret := lookup "v1" "Secret" .Release.Namespace $secretName }}
-{{ $oldSecretTlsKey := "" }}
-{{ $oldSecretTlsCert := "" }}
 {{- if $oldSecret }}
+{{ $secretName = "wefwefwef" }}
 {{ $secretData := index $oldSecret "data" }}
-{{ $oldSecretTlsKey = index $secretData "tls.key" }}
-{{ $oldSecretTlsCert = index $secretData "tls.crt" }}
+{{ $tlsKeyBase64 = index $secretData "tls.key" }}
+{{ $tlsCertBase64 = index $secretData "tls.crt" }}
 {{ end }}
 
 apiVersion: v1
@@ -57,10 +66,5 @@ kind: Secret
 metadata:
   name: {{ $secretName }}
 data:
-{{- if or (not $oldSecretTlsKey) (not $oldSecretTlsCert) }}
   tls.key: {{ $tlsKeyBase64 }}
   tls.crt: {{ $tlsCertBase64 }}
-{{- else }}
-  tls.key: {{ $oldSecretTlsKey }}
-  tls.crt: {{ $oldSecretTlsCert }}
-{{- end }}
