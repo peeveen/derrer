@@ -55,7 +55,6 @@ webhooks:
 {{ $secretName := printf "%s-tls" ( include "derrer.fullname" . ) }}
 {{- $oldSecret := lookup "v1" "Secret" .Release.Namespace $secretName }}
 {{- if $oldSecret }}
-{{ $secretName = "wefwefwef" }}
 {{ $secretData := index $oldSecret "data" }}
 {{ $tlsKeyBase64 = index $secretData "tls.key" }}
 {{ $tlsCertBase64 = index $secretData "tls.crt" }}
