@@ -19,7 +19,7 @@ Once installed, any appropriately-annotated `Secret` that is added to the cluste
 First of all, install the Helm chart into your cluster:
 
 ```bash
-helm install derrer oci://registry-1.docker.io/peeveen/derrer --version=1.0.0
+helm install derrer oci://registry-1.docker.io/peeveen/derrer --version=1.1.0
 ```
 
 Then, add an appropriate annotation to your `Secret` and, when it is added to the cluster, Derrer should jump into action and perform any requested conversions.
