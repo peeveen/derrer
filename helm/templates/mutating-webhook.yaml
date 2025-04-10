@@ -34,7 +34,7 @@ webhooks:
         path: "/der"
       caBundle: {{ $caCertBase64 }}
     rules:
-      - operations: ["CREATE", "UPDATE"]
+      - operations: ["CREATE" {{ if .Values.mutateOnUpdate }}, "UPDATE" {{ end }}]
         apiGroups: ["*"]
         apiVersions: ["v1"]
         resources: ["secrets"]
