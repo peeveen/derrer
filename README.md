@@ -22,6 +22,9 @@ First of all, install the Helm chart into your cluster:
 helm install derrer oci://registry-1.docker.io/peeveen/derrer --version=1.1.0
 ```
 
+> Use `--set mutateOnUpdate=false` if you _don't_ want the mutation to occur on `UPDATE` events. By default, it will
+> affect `CREATE` _and_ `UPDATE` events.
+
 Then, add an appropriate annotation to your `Secret` and, when it is added to the cluster, Derrer should jump into action and perform any requested conversions.
 
 | Annotation name                   | Description                                                                                                                                                                                                                              | Default value  |

@@ -30,6 +30,10 @@ service:
   tolerations: []
   affinity: {}
 
+# If true, the mutation will occur on UPDATE events as well as CREATE
+# events. If false, CREATE only.
+mutateOnUpdate: true
+
 # Annotations to look for on K8S Secrets
 # At least one must have a non-blank value for derrer to trigger.
 annotations:
