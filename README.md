@@ -19,7 +19,7 @@ Once installed, any appropriately-annotated `Secret` that is added to the cluste
 First of all, install the Helm chart into your cluster:
 
 ```bash
-helm install derrer oci://registry-1.docker.io/peeveen/derrer --version=1.1.0
+helm install derrer oci://registry-1.docker.io/peeveen/derrer --version=1.2.0
 ```
 
 > Use `--set mutateOnUpdate=false` if you _don't_ want the mutation to occur on `UPDATE` events. By default, it will
